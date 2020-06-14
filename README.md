@@ -12,8 +12,8 @@
 [travis-url]: https://travis-ci.org/chrisengelsma/ts-scikit
 [travis-image]: http://img.shields.io/travis/chrisengelsma/ts-scikit.svg
 
-[gitter-url]: https://gitter.im/chrisengelsma/ts-scikit
-[gitter-image]: https://badges.gitter.im/chrisengelsma/ts-scikit.png
+[gitter-url]: https://gitter.im/ts-scikit/community
+[gitter-image]: https://badges.gitter.im/ts-scikit.png
 
 [coveralls-url]: https://img.shields.io/coveralls/github/chrisengelsma/ts-scikit/master
 [coveralls-image]: http://img.shields.io/coveralls/chrisengelsma/ts-scikit/master.svg
