@@ -1,11 +1,10 @@
 {
   "name": "ts-scikit",
-  "description": "Scientific toolkit written in Typescript",
   "version": "0.1.0",
-  "license": "Apache-2.0",
+  "description": "A scientific toolkit written in Typescript",
   "author": "Chris Engelsma <chris.engelsma@gmail.com>",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./index.js",
+  "types": "./lib/ts-scikit.d.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/chrisengelsma/ts-scikit.git"
@@ -19,20 +18,24 @@
     "science",
     "image-processing"
   ],
+  "license": "Apache-2.0",
   "scripts": {
-    "setup": "npm install",
-    "build": "tsc",
-    "build-watch": "tsc --watch",
-    "test": "npm run test-only",
-    "test-only": "mocha -r ts-node/register tests/**/*.spec.ts",
-    "typedoc": "typedoc --out ./docs --mode modules --tsconfig tsconfig.json ./src",
-    "posttypedoc": "shx cp .nojekyll docs/.nojekyll",
-    "coverage": "nyc npm run test"
+    "prepare": "npm run build",
+    "build": "tsc -p .",
+    "clean": "rm -rf lib",
+    "watch": "tsc -w -p .",
+    "lint": "tslint -p tsconfig.json",
+    "toc": "./node_modules/.bin/doctoc README.md --github --maxlevel 3",
+    "cover": "nyc --extension=.ts --reporter=lcov --reporter=html --reporter=text mocha --timeout 15000 --exit test/*-test.js test/security/*.js",
+    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js -v",
+    "docs": "typedoc --out docs",
+    "test": "mocha --timeout 15000 --bail --exit test/*-test.js test/security/*.js"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.2.11",
     "@types/mocha": "^7.0.2",
+    "doctoc": "^1.4.0",
     "chai": "^4.2.0",
     "mocha": "^8.0.1",
     "nyc": "^15.1.0",
@@ -44,6 +47,10 @@
     "typescript": "^3.7.5"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=4.0.0"
+  },
+  "directories": {
+    "lib": "./lib",
+    "test": "./test"
   }
 }

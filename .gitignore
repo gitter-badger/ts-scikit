@@ -1,10 +1,13 @@
 # Created by .ignore support plugin (hsz.mobi)
 .DS_Store
-build/
-.idea/
+npm-debug.log
+coverage
 node_modules/
-package-lock.json
-docs/
-dist/
+yarn.lock
 .nyc_output/
-package-lock.json
+
+.vscode
+.idea
+*.iml
+/lib
+/docs
