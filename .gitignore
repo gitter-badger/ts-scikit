@@ -5,6 +5,7 @@ coverage
 node_modules/
 yarn.lock
 .nyc_output/
+ts-scikit-*.tgz
 
 .vscode
 .idea

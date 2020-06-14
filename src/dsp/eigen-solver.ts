@@ -14,8 +14,8 @@ export class EigenSolver {
   private static _SolveSymmetric3x3Jacobi(a: number[][], v: number[][], d: number[]): void {
     // Copy matrix to local variables.
     let a00 = a[0][0],
-      a01 = a[0][1], a11 = a[1][1],
-      a02 = a[0][2], a12 = a[1][2], a22 = a[2][2];
+        a01 = a[0][1], a11 = a[1][1],
+        a02 = a[0][2], a12 = a[1][2], a22 = a[2][2];
 
     // Initial eigenvectors.
     let v00 = 1.0, v01 = 0.0, v02 = 0.0,
@@ -346,8 +346,8 @@ export class EigenSolver {
         let c = 1.0;
         let p = 0.0;
         for (let i = m - 1; i >= l; --i) {
-          let f = s * e[i];
-          let b = c * e[i];
+          const f = s * e[i];
+          const b = c * e[i];
           if (Math.abs(f) > Math.abs(g)) {
             c = g / f;
             r = Math.sqrt(c * c + 1.0);
@@ -388,19 +388,19 @@ export class EigenSolver {
    * @private
    */
   private static _ReduceSymmetric3x3(a: number[][], v: number[][], d: number[], e: number[]): void {
-    let a00 = a[0][0],
-      a01 = a[0][1], a11 = a[1][1],
-      a02 = a[0][2], a12 = a[1][2], a22 = a[2][2];
+    const a00 = a[0][0],
+          a01 = a[0][1], a11 = a[1][1],
+          a02 = a[0][2], a12 = a[1][2], a22 = a[2][2];
     let v11 = 1.0;
     let v12 = 0.0;
     let v21 = 0.0;
     let v22 = 1.0;
-    let h = a01 * a01 + a02 * a02;
-    let g = ( a01 > 0.0 ) ? -Math.sqrt(h) : Math.sqrt(h);
-    let e0 = g;
+    const h = a01 * a01 + a02 * a02;
+    const g = ( a01 > 0.0 ) ? -Math.sqrt(h) : Math.sqrt(h);
+    const e0 = g;
     let f = g * a01;
-    let u1 = a01 - g;
-    let u2 = a02;
+    const u1 = a01 - g;
+    const u2 = a02;
     let omega = h - f;
     let d0, d1, d2, e1, s, q1, q2;
     if (omega > 0.0) {
@@ -458,9 +458,9 @@ export class EigenSolver {
    */
   static SolveSymmetric2x2(a: number[][], v: number[][], d: number[]): void {
 
-    //Copy matrix to local variables.
+    // Copy matrix to local variables.
     let a00: number = a[0][0];
-    let a01: number = a[0][1];
+    const a01: number = a[0][1];
     let a11: number = a[1][1];
 
     // Initial eigenvectors.

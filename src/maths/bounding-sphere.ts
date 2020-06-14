@@ -112,7 +112,7 @@ export class BoundingSphere {
             this.expandByPoint(new Point3(xyz[i], xyz[i + 1], xyz[i + 2]));
           }
         } else if (b[0] instanceof Point3) {
-          for (let point of ( b as Point3[] )) {
+          for (const point of ( b as Point3[] )) {
             this.expandByPoint(point);
           }
         }
@@ -169,7 +169,7 @@ export class BoundingSphere {
       if (!bs.isInfinite) {
         if (!bs.isEmpty) {
           if (!this.isEmpty) {
-            let dx = bs.center.x - this._x,
+            const dx = bs.center.x - this._x,
               dy = bs.center.y - this._y,
               dz = bs.center.z - this._z;
             const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
@@ -232,9 +232,9 @@ export class BoundingSphere {
           const xmax = pmax.x, ymax = pmax.y, zmax = pmax.z;
           if (!this.isEmpty) {
             for (let i = 0; i < 8; ++i) {
-              let x = ( ( i & 1 ) === 0 ) ? xmin : xmax;
-              let y = ( ( i & 2 ) === 0 ) ? ymin : ymax;
-              let z = ( ( i & 4 ) === 0 ) ? zmin : zmax;
+              const x = ( ( i & 1 ) === 0 ) ? xmin : xmax;
+              const y = ( ( i & 2 ) === 0 ) ? ymin : ymax;
+              const z = ( ( i & 4 ) === 0 ) ? zmin : zmax;
               this.expandRadiusByPoint(new Point3(x, y, z));
             }
           } else {
@@ -356,12 +356,12 @@ export class BoundingSphere {
               let y = ( ( i & 2 ) === 0 ) ? ymin : ymax;
               let z = ( ( i & 4 ) === 0 ) ? zmin : zmax;
 
-              let dx = x - this._x;
-              let dy = y - this._y;
-              let dz = z - this._z;
+              const dx = x - this._x;
+              const dy = y - this._y;
+              const dz = z - this._z;
 
-              let d = Math.sqrt(dx * dx + dy * dy + dz * dz);
-              let ds = ( d > 0.0 ) ? this._r / d : this._r;
+              const d = Math.sqrt(dx * dx + dy * dy + dz * dz);
+              const ds = ( d > 0.0 ) ? this._r / d : this._r;
 
               x = this._x - dx * ds;
               y = this._y - dy * ds;
@@ -376,9 +376,9 @@ export class BoundingSphere {
               if (z > zmax) { zmax = z; }
             }
           }
-          let dx = xmax - xmin;
-          let dy = ymax - ymin;
-          let dz = zmax - zmin;
+          const dx = xmax - xmin;
+          const dy = ymax - ymin;
+          const dz = zmax - zmin;
 
           this._r = 0.5 * Math.sqrt(dx * dx + dy * dy + dz * dz);
           this._x = 0.5 * ( xmin + xmax );

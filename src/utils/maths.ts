@@ -121,7 +121,7 @@ private static med3(a: number[], i: number, j: number, k: number): number {
 
 private static swap(a: number[], i: number, j: number, n: number = 1): void {
   while (n > 0) {
-    let ai = a[i];
+    const ai = a[i];
     a[i++] = a[j];
     a[j++] = ai;
     --n;
@@ -132,7 +132,7 @@ static quickPartialSort(k: number, arr: number[]): void {
   const n = arr.length;
   let p = 0;
   let q = n - 1;
-  let m = (n > this.NSMALL_SORT) ? new Array<number>(2) : null;
+  const m = (n > this.NSMALL_SORT) ? new Array<number>(2) : null;
   while (q - p >= this.NSMALL_SORT) {
     m[0] = p;
     m[1] = q;
@@ -157,22 +157,22 @@ private static insertionSort(a: number[], p: number, q: number): void {
 }
 
 private static quickPartition(x: number[], m: number[]): void {
-  let p = m[0];
-  let q = m[1];
-  let n = q - p + 1;
+  const p = m[0];
+  const q = m[1];
+  const n = q - p + 1;
   let k = (p + q) / 2;
   if (n > this.NSMALL_SORT) {
     let j = q;
     let l = q;
     if (n > this.NLARGE_SORT) {
-      let s = n / 8;
+      const s = n / 8;
       j = this.med3(x, j, j + s, j + 2 * s);
       k = this.med3(x, k - s, k, k + s);
       l = this.med3(x, l - 2 * s, l - s, l);
     }
     k = this.med3(x, j, k, l);
   }
-  let y = x[k];
+  const y = x[k];
   let a = p, b = p;
   let c = q, d = q;
   while (true) {
@@ -190,9 +190,9 @@ private static quickPartition(x: number[], m: number[]): void {
     --c;
   }
 
-  let r = Math.min(a - p, b - a);
-  let s = Math.min(d - c, q - d);
-  let t = q + 1;
+  const r = Math.min(a - p, b - a);
+  const s = Math.min(d - c, q - d);
+  const t = q + 1;
   this.swap(x, p, b - r, r);
   this.swap(x, b, t - s, s);
   m[0] = p + (b - a); // p --- m[0]-1 | m[0] --- m[1] | m[1]+1 --- q

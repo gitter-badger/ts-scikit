@@ -362,7 +362,7 @@ export class EigenTensors3 implements Tensors3 {
       [ a13, a23, a33 ]
     ];
 
-    const vv: number[][] = new Array<Array<number>>(3);
+    const vv: number[][] = new Array<number[]>(3);
     for (let i = 0; i < 3; ++i) { vv[i] = new Array<number>(3); }
     const ev: number[] = new Array<number>(3);
 

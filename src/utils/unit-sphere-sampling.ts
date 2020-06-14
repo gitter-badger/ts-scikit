@@ -37,7 +37,7 @@ export class UnitSphereSampling {
     // upper limit on the largest positive index is 2^(nbits-1)-1.
     // The largest positive index is 1+2*m*(1+m), which also equals
     // the number (nindex) of positive indices.
-    let indexLimit: number = ( 1 << ( nbits - 1 ) ) - 1;
+    const indexLimit: number = ( 1 << ( nbits - 1 ) ) - 1;
     let m = 1;
     while (1 + 2 * m * ( 1 + m ) <= indexLimit) { ++m; }
 
@@ -62,19 +62,19 @@ export class UnitSphereSampling {
     this._npoint = 2 * this._mindex - 4 * this._m; // = 2 + 4 * _m * _m
 
     // Tables for points in upper and lower hemispheres.
-    this._pu = new Array<Array<number>>(this._nindex);
-    this._pl = new Array<Array<number>>(this._nindex);
+    this._pu = new Array<number[]>(this._nindex);
+    this._pl = new Array<number[]>(this._nindex);
 
     // Table of point indices.
-    this._ip = new Array<Array<number>>(this._n);
+    this._ip = new Array<number[]>(this._n);
     for (let i = 0; i < this._n; ++i) { this._ip[i] = new Array(this._n); }
 
     // For all sampled s on flattened octahedron...
     for (let is = 0, js = -this._m, index = 0; is < this._n; ++is, ++js) {
 
       // Planar coordinate s and |s|.
-      let s = js * this._d;
-      let as = ( s >= 0.0 ) ? s : -s;
+      const s = js * this._d;
+      const as = ( s >= 0.0 ) ? s : -s;
 
       // For all sampled r on flattened octahedron...
       for (let ir = 0, jr = -this._m; ir < this._n; ++ir, ++jr) {
@@ -89,8 +89,8 @@ export class UnitSphereSampling {
           this._ip[is][ir] = ++index;
 
           // Planar coordinate r and |r|.
-          let r = jr * this._d;
-          let ar = ( r >= 0.0 ) ? r : -r;
+          const r = jr * this._d;
+          const ar = ( r >= 0.0 ) ? r : -r;
 
           // Third coordinate t (t >= 0) on octahedron.
           let t = Math.max(0.0, 1.0 - ar - as);

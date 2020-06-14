@@ -155,11 +155,11 @@ export class Histogram {
         }
       }
     }
-    let fbin = this._vmin + 0.5 * dbin;
+    const fbin = this._vmin + 0.5 * dbin;
     this._sbin = new Sampling(nbin, dbin, fbin);
 
     // Count binned values.
-    let vscl = 1.0 / dbin;
+    const vscl = 1.0 / dbin;
     const n = v.length;
     this._nlo = 0;
     this._nhi = 0;
@@ -167,7 +167,7 @@ export class Histogram {
     this._nin = 0;
 
     for (let i = 0; i < n; ++i) {
-      let vi = v[i];
+      const vi = v[i];
       if (vi < this._vmin) {
         this._nlo += 1;
       } else if (vi > this._vmax) {
@@ -195,7 +195,7 @@ export class Histogram {
       const n = v.length;
       this._vmin = this._vmax = v[0];
       for (let i = 1; i < n; ++i) {
-        let vi = v[i];
+        const vi = v[i];
         if (vi < this._vmin) { this._vmin = vi; }
         if (vi > this._vmax) { this._vmax = vi; }
       }
@@ -212,7 +212,7 @@ export class Histogram {
       t = new Array<number>(n);
       let m = 0;
       for (let i = 0; i < n; ++i) {
-        let vi = v[i];
+        const vi = v[i];
         if (this._vmin <= vi && vi <= this._vmax) {
           t[m++] = vi;
         }

@@ -147,7 +147,7 @@ export class BoundingBox {
             this.expandByPoint(new Point3(xyz[i], xyz[i + 1], xyz[i + 2]));
           }
         } else if (p[0] instanceof Point3) {
-          for (let point of ( p as Point3[] )) {
+          for (const point of ( p as Point3[] )) {
             this.expandByPoint(point);
           }
         }

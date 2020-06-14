@@ -3,14 +3,7 @@ sudo: false
 language: node_js
 
 node_js:
-  - "9"
-  - "8"
-  - "7"
-  - "6"
-  - "lts/*"
-
-#branches:
-#  only: [ "master", "develop" ]
+  - "node"
 
 before_script:
   - npm uninstall typescript --no-save
@@ -19,9 +12,11 @@ before_script:
   - npm run build
 
 script:
-  - npm run test-only
+  - npm run lint
+  - npm run coverage
 
 after_success:
+  - npm run coveralls
   - npm run typedoc
   - npm pack
 

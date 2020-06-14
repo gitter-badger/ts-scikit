@@ -7,12 +7,12 @@ import { Point4 } from './point4';
 
 export class Matrix44 {
 
-  private _m: Array<number> = new Array<number>(16);
+  private _m: number[] = new Array<number>(16);
 
   /**
    * Constructs an identity matrix.
    */
-  public static AsIdentity(): Matrix44 {
+  static AsIdentity(): Matrix44 {
     return new Matrix44(
       1, 0, 0, 0,
       0, 1, 0, 0,
@@ -25,7 +25,7 @@ export class Matrix44 {
    * @param arr an array of values.
    * @param columnMajorOrder true, if array is organized in column-major order; false, if row-major order.
    */
-  public static FromArray(arr: Array<number>, columnMajorOrder: boolean = true): Matrix44 {
+  static FromArray(arr: number[], columnMajorOrder: boolean = true): Matrix44 {
     if (columnMajorOrder) {
       return new Matrix44(
         arr[0], arr[4], arr[8], arr[12],
@@ -47,7 +47,7 @@ export class Matrix44 {
    * Constructs a new matrix from another.
    * @param mat a matrix.
    */
-  public static FromMatrix44(mat: Matrix44): Matrix44 {
+  static FromMatrix44(mat: Matrix44): Matrix44 {
     return Matrix44.FromArray(mat.m);
   }
 
@@ -84,192 +84,13 @@ export class Matrix44 {
   /**
    * Gets the column-major array of values for this matrix.
    */
-  public get m(): Array<number> { return this._m; }
-
-  /**
-   * Returns a copy (by value) of this matrix.
-   * @returns a copy of this matrix.
-   */
-  public clone(): Matrix44 {
-    return Matrix44.FromMatrix44(this);
-  }
-
-  /**
-   * Returns the transpose of this matrix.
-   * @returns the transpose of this matrix.
-   */
-  public transpose(): Matrix44 {
-    const t: Array<number> = [
-      this._m[0], this._m[4], this._m[8], this._m[12],
-      this._m[1], this._m[5], this._m[9], this._m[13],
-      this._m[2], this._m[6], this._m[10], this._m[14],
-      this._m[3], this._m[7], this._m[11], this._m[15]
-    ];
-    return Matrix44.FromArray(t);
-  }
-
-  /**
-   * Replaces this matrix with its transpose.
-   * @returns the transpose of this matrix.
-   */
-  public transposeEquals(): Matrix44 {
-    this._m = this.transpose().m;
-    return this;
-  }
-
-  /**
-   * Returns the inverse of this matrix.
-   * @returns the inverse of this matrix.
-   */
-  public inverse(): Matrix44 {
-    return Matrix44.FromArray(this.invert(this._m));
-  }
-
-  /**
-   * Inverts this matrix.
-   * @returns the inverse of this matrix.
-   */
-  public inverseEquals(): Matrix44 {
-    this._m = this.invert(Object.assign({}, this._m));
-    return this;
-  }
-
-  /**
-   * Returns the product MA of this matrix M and matrix A.
-   * @param a the matrix A.
-   * @returns the product MA.
-   */
-  public times(a: Matrix44 | Vector3 | Point3 | Point4): Matrix44 | Vector3 | Point3 | Point4 {
-    if (a instanceof Matrix44) {
-      return this.timesMatrix44(a);
-    } else if (a instanceof Vector3) {
-      return this.timesVector3(a);
-    } else if (a instanceof Point3) {
-      return this.timesPoint3(a);
-    } else if (a instanceof Point4) {
-      return this.timesPoint4(a);
-    } else {
-      return this;
-    }
-  }
-
-
-  /**
-   * Replaces this matrix M with the product MA.
-   * @param a the matrix A.
-   * @returns the product MA.
-   */
-  public timesEquals(a: Matrix44): Matrix44 {
-    this.mul(this.m, a.m, this.m);
-    return this;
-  }
-
-  /**
-   * Sets all elements of this matrix.
-   * @param m00 the element with (row, col) indices (0, 0)
-   * @param m01 the element with (row, col) indices (0, 1)
-   * @param m02 the element with (row, col) indices (0, 2)
-   * @param m03 the element with (row, col) indices (0, 3)
-   * @param m10 the element with (row, col) indices (1, 0)
-   * @param m11 the element with (row, col) indices (1, 1)
-   * @param m12 the element with (row, col) indices (1, 2)
-   * @param m13 the element with (row, col) indices (1, 3)
-   * @param m20 the element with (row, col) indices (2, 0)
-   * @param m21 the element with (row, col) indices (2, 1)
-   * @param m22 the element with (row, col) indices (2, 2)
-   * @param m23 the element with (row, col) indices (2, 3)
-   * @param m30 the element with (row, col) indices (3, 0)
-   * @param m31 the element with (row, col) indices (3, 1)
-   * @param m32 the element with (row, col) indices (3, 2)
-   * @param m33 the element with (row, col) indices (3, 3)
-   */
-  public set(m00: number, m01: number, m02: number, m03: number,
-             m10: number, m11: number, m12: number, m13: number,
-             m20: number, m21: number, m22: number, m23: number,
-             m30: number, m31: number, m32: number, m33: number): void {
-    this._m[0] = m00; this._m[4] = m01; this._m[8] = m02; this._m[12] = m03;
-    this._m[1] = m10; this._m[5] = m11; this._m[9] = m12; this._m[13] = m13;
-    this._m[2] = m20; this._m[6] = m21; this._m[10] = m22; this._m[14] = m23;
-    this._m[3] = m30; this._m[7] = m31; this._m[11] = m32; this._m[15] = m33;
-  }
-
-  /**
-   * Returns the product MA of this matrix M and a matrix A.
-   * @param a the matrix A.
-   * @return the product MA.
-   */
-  timesMatrix44(a: Matrix44): Matrix44 {
-    return Matrix44.FromArray(this.mul(this.m, a.m, new Array<number>(16)), true);
-  }
-
-  /**
-   * Returns the product Mv of this matrix M and a vector v.
-   * Uses only the upper-left 3-by-3 elements of this matrix.
-   * @param v the vector v.
-   * @return the product Mv.
-   */
-  timesVector3(v: Vector3): Vector3 {
-    const vx = v.x,
-          vy = v.y,
-          vz = v.z;
-
-    const ux = this.m[0] * vx + this.m[4] * vy + this.m[8] * vz,
-          uy = this.m[1] * vx + this.m[5] * vy + this.m[9] * vz,
-          uz = this.m[2] * vx + this.m[6] * vy + this.m[10] * vz;
-
-    return new Vector3(ux, uy, uz);
-  }
-
-  /**
-   * Returns the product Mp of this matrix M and a point p.
-   * The coordinate w of the specified point is assume to equal 1.0,
-   * and the returned point is homogenized,
-   * @param p the point p.
-   * @returns the product Mp.
-   */
-  timesPoint3(p: Point3): Point3 {
-    const px = p.x,
-          py = p.y,
-          pz = p.z;
-
-    let qx = this.m[0] * px + this.m[4] * py + this.m[8] * pz + this.m[12],
-        qy = this.m[1] * px + this.m[5] * py + this.m[9] * pz + this.m[13],
-        qz = this.m[2] * px + this.m[6] * py + this.m[10] * pz + this.m[14],
-        qw = this.m[3] * px + this.m[7] * py + this.m[11] * pz + this.m[15];
-
-    if (qw !== 1.0) {
-      const s = 1.0 / qw;
-      qx *= s;
-      qy *= s;
-      qz *= s;
-    }
-    return new Point3(qx, qy, qz);
-  }
-
-  /**
-   * Returns the product Mp of this matrix M and a point p.
-   * @param p the point p.
-   * @returns the  product Mp.
-   */
-  timesPoint4(p: Point4): Point4 {
-    const px = p.x,
-          py = p.y,
-          pz = p.z,
-          pw = p.w;
-
-    let qx = this.m[0] * px + this.m[4] * py + this.m[8] * pz + this.m[12] * pw,
-        qy = this.m[1] * px + this.m[5] * py + this.m[9] * pz + this.m[13] * pw,
-        qz = this.m[2] * px + this.m[6] * py + this.m[10] * pz + this.m[14] * pw,
-        qw = this.m[3] * px + this.m[7] * py + this.m[11] * pz + this.m[15] * pw;
-
-    return new Point4(qx, qy, qz, qw);
-  }
+  get m(): number[] { return this._m; }
 
   /**
    * Computes the matrix product C = AB.
    * The product may be computed in place.
    */
-  private mul(a: Array<number>, b: Array<number>, c: Array<number>): Array<number> {
+  private mul(a: number[], b: number[], c: number[]): number[] {
 
     const a00 = a[0], a01 = a[4], a02 = a[8], a03 = a[12];
     const a10 = a[1], a11 = a[5], a12 = a[9], a13 = a[13];
@@ -305,7 +126,7 @@ export class Matrix44 {
    * Computes the matrix product C = AB'.
    * The product may be computed in place.
    */
-  private mult(a: Array<number>, b: Array<number>, c: Array<number>): Array<number> {
+  private mult(a: number[], b: number[], c: number[]): number[] {
     const a00 = a[0], a01 = a[4], a02 = a[8], a03 = a[12];
     const a10 = a[1], a11 = a[5], a12 = a[9], a13 = a[13];
     const a20 = a[2], a21 = a[6], a22 = a[10], a23 = a[14];
@@ -340,7 +161,7 @@ export class Matrix44 {
    * Computes the matrix product C = A'B.
    * The product may be computed in place.
    */
-  private tmul(a: Array<number>, b: Array<number>, c: Array<number>): Array<number> {
+  private tmul(a: number[], b: number[], c: number[]): number[] {
     const a00 = a[0], a01 = a[4], a02 = a[8], a03 = a[12];
     const a10 = a[1], a11 = a[5], a12 = a[9], a13 = a[13];
     const a20 = a[2], a21 = a[6], a22 = a[10], a23 = a[14];
@@ -381,26 +202,14 @@ export class Matrix44 {
    * @param a array of matrix A.
    * @returns the inverse of array A.
    */
-  private invert(a: Array<number>): Array<number> {
-    let b: Array<number> = new Array<number>(16);
+  private invert(a: number[]): number[] {
+    const b: number[] = new Array<number>(16);
 
     // transpose
-    const t00 = a[0],
-          t01 = a[4],
-          t02 = a[8],
-          t03 = a[12],
-          t04 = a[1],
-          t08 = a[2],
-          t12 = a[3],
-          t05 = a[5],
-          t09 = a[6],
-          t13 = a[7],
-          t06 = a[9],
-          t10 = a[10],
-          t14 = a[11],
-          t07 = a[13],
-          t11 = a[14],
-          t15 = a[15];
+    const t00 = a[0], t01 = a[4], t02 = a[8], t03 = a[12];
+    const t04 = a[1], t08 = a[2], t12 = a[3], t05 = a[5];
+    const t09 = a[6], t13 = a[7], t06 = a[9], t10 = a[10];
+    const t14 = a[11], t07 = a[13], t11 = a[14], t15 = a[15];
 
     // pairs for first 8 elements (cofactors)
     let u00 = t10 * t15,
@@ -474,5 +283,195 @@ export class Matrix44 {
     b[14] *= d;
     b[15] *= d;
     return b;
+  }
+
+  /**
+   * Returns a copy (by value) of this matrix.
+   * @returns a copy of this matrix.
+   */
+  clone(): Matrix44 {
+    return Matrix44.FromMatrix44(this);
+  }
+
+  /**
+   * Returns the transpose of this matrix.
+   * @returns the transpose of this matrix.
+   */
+  transpose(): Matrix44 {
+    const t: number[] = [
+      this._m[0], this._m[4], this._m[8], this._m[12],
+      this._m[1], this._m[5], this._m[9], this._m[13],
+      this._m[2], this._m[6], this._m[10], this._m[14],
+      this._m[3], this._m[7], this._m[11], this._m[15]
+    ];
+    return Matrix44.FromArray(t);
+  }
+
+  /**
+   * Replaces this matrix with its transpose.
+   * @returns the transpose of this matrix.
+   */
+  transposeEquals(): Matrix44 {
+    this._m = this.transpose().m;
+    return this;
+  }
+
+  /**
+   * Returns the inverse of this matrix.
+   * @returns the inverse of this matrix.
+   */
+  inverse(): Matrix44 {
+    return Matrix44.FromArray(this.invert(this._m));
+  }
+
+  /**
+   * Inverts this matrix.
+   * @returns the inverse of this matrix.
+   */
+  inverseEquals(): Matrix44 {
+    this._m = this.invert(Object.assign({}, this._m));
+    return this;
+  }
+
+  /**
+   * Returns the product MA of this matrix M and matrix A.
+   * @param a the matrix A.
+   * @returns the product MA.
+   */
+  times(a: Matrix44 | Vector3 | Point3 | Point4): Matrix44 | Vector3 | Point3 | Point4 {
+    if (a instanceof Matrix44) {
+      return this.timesMatrix44(a);
+    } else if (a instanceof Vector3) {
+      return this.timesVector3(a);
+    } else if (a instanceof Point3) {
+      return this.timesPoint3(a);
+    } else if (a instanceof Point4) {
+      return this.timesPoint4(a);
+    } else {
+      return this;
+    }
+  }
+
+  /**
+   * Replaces this matrix M with the product MA.
+   * @param a the matrix A.
+   * @returns the product MA.
+   */
+  timesEquals(a: Matrix44): Matrix44 {
+    this.mul(this.m, a.m, this.m);
+    return this;
+  }
+
+  /**
+   * Sets all elements of this matrix.
+   * @param m00 the element with (row, col) indices (0, 0)
+   * @param m01 the element with (row, col) indices (0, 1)
+   * @param m02 the element with (row, col) indices (0, 2)
+   * @param m03 the element with (row, col) indices (0, 3)
+   * @param m10 the element with (row, col) indices (1, 0)
+   * @param m11 the element with (row, col) indices (1, 1)
+   * @param m12 the element with (row, col) indices (1, 2)
+   * @param m13 the element with (row, col) indices (1, 3)
+   * @param m20 the element with (row, col) indices (2, 0)
+   * @param m21 the element with (row, col) indices (2, 1)
+   * @param m22 the element with (row, col) indices (2, 2)
+   * @param m23 the element with (row, col) indices (2, 3)
+   * @param m30 the element with (row, col) indices (3, 0)
+   * @param m31 the element with (row, col) indices (3, 1)
+   * @param m32 the element with (row, col) indices (3, 2)
+   * @param m33 the element with (row, col) indices (3, 3)
+   */
+  set(m00: number, m01: number, m02: number, m03: number,
+      m10: number, m11: number, m12: number, m13: number,
+      m20: number, m21: number, m22: number, m23: number,
+      m30: number, m31: number, m32: number, m33: number): void {
+    this._m[0] = m00;
+    this._m[4] = m01;
+    this._m[8] = m02;
+    this._m[12] = m03;
+    this._m[1] = m10;
+    this._m[5] = m11;
+    this._m[9] = m12;
+    this._m[13] = m13;
+    this._m[2] = m20;
+    this._m[6] = m21;
+    this._m[10] = m22;
+    this._m[14] = m23;
+    this._m[3] = m30;
+    this._m[7] = m31;
+    this._m[11] = m32;
+    this._m[15] = m33;
+  }
+
+  /**
+   * Returns the product MA of this matrix M and a matrix A.
+   * @param a the matrix A.
+   * @return the product MA.
+   */
+  timesMatrix44(a: Matrix44): Matrix44 {
+    return Matrix44.FromArray(this.mul(this.m, a.m, new Array<number>(16)), true);
+  }
+
+  /**
+   * Returns the product Mv of this matrix M and a vector v.
+   * Uses only the upper-left 3-by-3 elements of this matrix.
+   * @param v the vector v.
+   * @return the product Mv.
+   */
+  timesVector3(v: Vector3): Vector3 {
+    const vx = v.x,
+          vy = v.y,
+          vz = v.z;
+
+    const ux = this.m[0] * vx + this.m[4] * vy + this.m[8] * vz,
+          uy = this.m[1] * vx + this.m[5] * vy + this.m[9] * vz,
+          uz = this.m[2] * vx + this.m[6] * vy + this.m[10] * vz;
+
+    return new Vector3(ux, uy, uz);
+  }
+
+  /**
+   * Returns the product Mp of this matrix M and a point p.
+   * The coordinate w of the specified point is assume to equal 1.0,
+   * and the returned point is homogenized,
+   * @param p the point p.
+   * @returns the product Mp.
+   */
+  timesPoint3(p: Point3): Point3 {
+    const px = p.x,
+          py = p.y,
+          pz = p.z;
+
+    let qx = this.m[0] * px + this.m[4] * py + this.m[8] * pz + this.m[12];
+    let qy = this.m[1] * px + this.m[5] * py + this.m[9] * pz + this.m[13];
+    let qz = this.m[2] * px + this.m[6] * py + this.m[10] * pz + this.m[14];
+    const qw = this.m[3] * px + this.m[7] * py + this.m[11] * pz + this.m[15];
+
+    if (qw !== 1.0) {
+      const s = 1.0 / qw;
+      qx *= s;
+      qy *= s;
+      qz *= s;
+    }
+    return new Point3(qx, qy, qz);
+  }
+
+  /**
+   * Returns the product Mp of this matrix M and a point p.
+   * @param p the point p.
+   * @returns the  product Mp.
+   */
+  timesPoint4(p: Point4): Point4 {
+    const px = p.x,
+          py = p.y,
+          pz = p.z,
+          pw = p.w;
+
+    const qx = this.m[0] * px + this.m[4] * py + this.m[8] * pz + this.m[12] * pw,
+          qy = this.m[1] * px + this.m[5] * py + this.m[9] * pz + this.m[13] * pw,
+          qz = this.m[2] * px + this.m[6] * py + this.m[10] * pz + this.m[14] * pw,
+          qw = this.m[3] * px + this.m[7] * py + this.m[11] * pz + this.m[15] * pw;
+
+    return new Point4(qx, qy, qz, qw);
   }
 }
