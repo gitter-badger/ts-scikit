@@ -20,16 +20,16 @@
   ],
   "license": "Apache-2.0",
   "scripts": {
-    "prepare": "npm run build",
+    "setup": "npm install",
     "build": "tsc -p .",
-    "clean": "rm -rf lib",
-    "watch": "tsc -w -p .",
+    "build-watch": "tsc -w -p .",
     "lint": "tslint -p tsconfig.json",
+    "test": "npm run test-only",
+    "test-only": "mocha -r ts-node/register tests/**/*.spec.ts",
     "toc": "./node_modules/.bin/doctoc README.md --github --maxlevel 3",
-    "cover": "nyc --extension=.ts --reporter=lcov --reporter=html --reporter=text mocha --timeout 15000 --exit test/*-test.js test/security/*.js",
-    "coveralls": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js -v",
-    "docs": "typedoc --out docs",
-    "test": "mocha --timeout 15000 --bail --exit test/*-test.js test/security/*.js"
+    "typedoc": "typedoc --out ./docs --mode modules --tsconfig tsconfig.json ./src",
+    "posttypedoc": "shx cp .nojekyll docs/.nojekyll",
+    "coverage": "nyc npm run test"
   },
   "dependencies": {},
   "devDependencies": {

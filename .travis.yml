@@ -15,11 +15,11 @@ node_js:
 before_script:
   - npm uninstall typescript --no-save
   - npm uninstall tslint --no-save
-  - npm install
-  - npm run prepare
+  - npm run setup
+  - npm run build
 
 script:
-  - npm run test
+  - npm run test-only
 
 after_success:
   - npm run typedoc
